@@ -14,14 +14,22 @@ public class Menu : MonoBehaviour
 
     public InstrumentController ic = null;
 
+    public void SetButtonsEnabled(bool e) {
+      foreach (MenuButton b in GetComponentsInChildren<MenuButton>()) {
+        b.GetComponent<BoxCollider2D>().enabled = e;
+      }
+    }
+
     public void EnableCredits() {
       creditsEnabled = true;
       credits.SetActive(true);
+      SetButtonsEnabled(false);
     }
 
     public void EnableScore() {
       scoreEnabled = true;
       score.SetActive(true);
+      SetButtonsEnabled(false);
     }
 
     void Update() {
@@ -29,10 +37,12 @@ public class Menu : MonoBehaviour
         if (creditsEnabled) {
           creditsEnabled = false;
           credits.SetActive(false);
+          SetButtonsEnabled(true);
         }
         if (scoreEnabled) {
           scoreEnabled = false;
           score.SetActive(false);
+          SetButtonsEnabled(true);
         }
       }
     }

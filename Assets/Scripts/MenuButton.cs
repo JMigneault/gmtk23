@@ -16,8 +16,15 @@ public class MenuButton : MonoBehaviour
 
     private Menu mc = null;
 
+    private bool pressed = false;
+
     void Start() {
       mc = transform.parent.GetComponent<Menu>();
+    }
+
+    public void OnMouseDown() {
+      Debug.Log("down");
+      pressed = true;
     }
 
     public void OnMouseEnter() {
@@ -34,20 +41,23 @@ public class MenuButton : MonoBehaviour
       GetComponent<SpriteRenderer>().sprite = normalSprite;
       sc.SetMuted(false);
 
-      switch (b) {
-        case bType.PLAY:
-          mc.menuing = false;
-          mc.gameObject.SetActive(false);
-          mc.ic.StartGenerating();
-        break;
-        case bType.TUTORIAL:
-          mc.menuing = false;
-          mc.gameObject.SetActive(false);
-          mc.ic.tutorializer.StartTutorial();
-        break;
-        case bType.CREDITS:
-          mc.EnableCredits();
-        break;
+      if (pressed) {
+        switch (b) {
+          case bType.PLAY:
+            mc.menuing = false;
+            mc.gameObject.SetActive(false);
+            mc.ic.StartGenerating();
+          break;
+          case bType.TUTORIAL:
+            mc.menuing = false;
+            mc.gameObject.SetActive(false);
+            mc.ic.tutorializer.StartTutorial();
+          break;
+          case bType.CREDITS:
+            mc.EnableCredits();
+          break;
+        }
       }
+      pressed = false;
     }
 }

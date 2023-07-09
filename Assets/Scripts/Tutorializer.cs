@@ -75,6 +75,8 @@ public class Tutorializer : MonoBehaviour
   public TutorialEvent[] events;
   private int i = 0;
   public bool tutorializing = false;
+  public GameObject decoration = null;
+
 
   private int realBpm;
   private float realNf;
@@ -85,6 +87,9 @@ public class Tutorializer : MonoBehaviour
 
   public void StartTutorial() {
     gameObject.SetActive(true);
+    if (decoration) {
+      decoration.SetActive(true);
+    }
     tutorializing = true;
     events[0].Start(ic);
     realBpm = ic.bpm;
@@ -101,14 +106,16 @@ public class Tutorializer : MonoBehaviour
           events[i].End(ic);
           if (++i >= events.Length) { // tutorial finished
             // RESET
-            ic.meter.Reset(); // TODO: other reset?
-            ic.music.Reset();
+            ic.Reset();
             ic.SetBpm(realBpm);
             ic.noteFrequency = realNf;
             
             ic.menu.gameObject.SetActive(true);
             ic.menu.menuing = true;
             tutorializing = false;
+            if (decoration) {
+              decoration.SetActive(false);
+            }
             gameObject.SetActive(false);
             return;
           }

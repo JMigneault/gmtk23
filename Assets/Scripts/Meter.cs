@@ -29,11 +29,7 @@ public class Meter : MonoBehaviour
       if (amount <= 0) {
         amount = 0;
         markerX = length * -0.5f;
-        menu.gameObject.SetActive(true);
-        ic.meter.Reset();
-        ic.music.Reset();
-        ic.Stop();
-        menu.EnableScore();
+        ic.GameDone(false);
       }
     }
 

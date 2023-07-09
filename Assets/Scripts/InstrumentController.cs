@@ -23,6 +23,8 @@ public class InstrumentController : MonoBehaviour
     public float totalLength = 55f; // 100 units length
     public float strangHeight = 2f;
 
+    public int levelLengthBeats = 210;
+
     public GameObject notePrefab;
     public float correctProb = .8f;
     
@@ -40,6 +42,7 @@ public class InstrumentController : MonoBehaviour
 
     private int numCorrect = 0;
     private int totalNum = 0;
+    private int numGenerated = 0;
 
     public Meter meter;
 
@@ -54,6 +57,7 @@ public class InstrumentController : MonoBehaviour
 
     public bool generating = false;
     public GameObject decoration = null;
+    public GameObject decoration2 = null;
 
     // Our instrument has strings, but C# doesn't have variables named "string". So in this fun alternate universe
     // our instrument has "strangs".
@@ -122,16 +126,34 @@ public class InstrumentController : MonoBehaviour
 
     public void StartGenerating() {
       decoration.SetActive(true);
+      decoration2.SetActive(true);
       generating = true;
     }
 
     public void Stop() {
       generating = false;
       decoration.SetActive(false);
+      decoration2.SetActive(false);
       foreach (NoteController c in GetComponentsInChildren<NoteController>()) {
         Destroy(c.gameObject);
       }
 
+    }
+
+    public void Reset() {
+      meter.Reset();
+      music.Reset();
+      totalNum = 0;
+      numCorrect = 0;
+      numGenerated = 0;
+      Stop();
+    }
+
+    public void GameDone(bool won) {
+      Reset();
+      menu.gameObject.SetActive(true);
+      menu.EnableScore();
+      // TODO
     }
 
     // Start is called before the first frame update
@@ -145,12 +167,18 @@ public class InstrumentController : MonoBehaviour
     void Update()
     {
       if (generating) {
-        beatFrac += (Time.deltaTime * bps);
-        if (beatFrac >= 1.0f) {
-          beatFrac -= 1.0f;
-          currBeat += 1;
-          if (currBeat % noteFrequency == 0) {
-            GenerateRandomNote();
+        if (totalNum >= levelLengthBeats) {
+          GameDone(true);
+        }
+        if (numGenerated < levelLengthBeats) {
+          beatFrac += (Time.deltaTime * bps);
+          if (beatFrac >= 1.0f) {
+            beatFrac -= 1.0f;
+            currBeat += 1;
+            if (currBeat % noteFrequency == 0) {
+              GenerateRandomNote();
+              numGenerated++;
+            }
           }
         }
 

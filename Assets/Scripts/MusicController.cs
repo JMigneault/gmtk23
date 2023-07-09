@@ -60,5 +60,6 @@ public class MusicController : MonoBehaviour
     music.volume = 1.0f;
     music.Stop();
     started = false;
+    t = 0;
   }
 }
