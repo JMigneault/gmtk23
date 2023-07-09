@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3ef998e8250d8cb4eaae3d6083452a3a
+guid: 8f55722676b5967429375b9fea06eefa
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 180
+  spritePixelsToUnits: 4
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -111,7 +111,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -123,43 +123,64 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: lights_0
+      name: target_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 722
-        height: 735
+        x: 118
+        y: 192
+        width: 16
+        height: 18
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 45686e7dced49524693b685ead35780e
-      internalID: -834111652
+      spriteID: 42763650c0f93c14eb8a25927ae749b9
+      internalID: 1095016745
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: lights_1
+      name: target_1
       rect:
         serializedVersion: 2
-        x: 449
-        y: 735
-        width: 723
-        height: 745
+        x: 137
+        y: 193
+        width: 14
+        height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 636a923446958934f87c9f5c03f10ad7
-      internalID: 1383121737
+      spriteID: 6f5371a1317bb4142aee87753a31c8e9
+      internalID: -110388596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: target_2
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 194
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41ee079d4b9b0a4459addd2e8118af5f
+      internalID: -662004807
       vertices: []
       indices: 
       edges: []
@@ -175,8 +196,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      lights_0: -834111652
-      lights_1: 1383121737
+      target_0: 1095016745
+      target_1: -110388596
+      target_2: -662004807
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

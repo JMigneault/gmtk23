@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 50
   m_Sprite: {fileID: 1520668890, guid: c53d96b3e41112d40a467f2e69e5fd82, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -156,4 +156,4 @@ MonoBehaviour:
   mcFadeProp: 0.3
   mcWaitProp: 0.15
   mcGoldSprite: {fileID: 966661129, guid: 3c1dfc801b0cd8f4d88bbc115634f3d5, type: 3}
-  mcTarget: {x: 1.688, y: 11.372, z: 0}
+  mcTarget: {x: 19.793, y: 11.17, z: 0}

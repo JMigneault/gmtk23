@@ -106,8 +106,6 @@ public class Tutorializer : MonoBehaviour
   }
 
   public void SetScore(int score, Transform parentSeq) {
-    Debug.Log("Setting score");
-
     currScoreContainer = Instantiate(scoreContainer, superScoreContainer);
     int remaining = score;
 
@@ -153,7 +151,7 @@ public class Tutorializer : MonoBehaviour
       }
     } else {
       if (currScoreContainer) { // SO HACKY
-        // Destroy(currScoreContainer);
+        Destroy(currScoreContainer);
       }
     }
   }
