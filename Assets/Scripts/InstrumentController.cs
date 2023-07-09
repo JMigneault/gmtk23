@@ -52,6 +52,9 @@ public class InstrumentController : MonoBehaviour
     public MusicController music = null;
     public Menu menu = null;
 
+    public bool generating = false;
+    public GameObject decoration = null;
+
     // Our instrument has strings, but C# doesn't have variables named "string". So in this fun alternate universe
     // our instrument has "strangs".
     public void MakeNote(int strang, NColor col, bool abridged) {
@@ -79,6 +82,11 @@ public class InstrumentController : MonoBehaviour
 
     public float getNoteSpeed() {
       return noteSpeed;
+    }
+
+    public void SetBpm(int bpm) {
+      bps = bpm / 60f;
+      noteSpeed = bps * lengthPerBeat;
     }
 
     public void PlayNote(NoteController n) {
@@ -112,19 +120,31 @@ public class InstrumentController : MonoBehaviour
       strangObjs[strang].GetComponent<StrangController>().SetMuted(muted);
     }
 
+    public void StartGenerating() {
+      decoration.SetActive(true);
+      generating = true;
+    }
+
+    public void Stop() {
+      generating = false;
+      decoration.SetActive(false);
+      foreach (NoteController c in GetComponentsInChildren<NoteController>()) {
+        Destroy(c.gameObject);
+      }
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {
       strangMuted = new bool[4];
       lengthPerBeat = totalLength / nBeats;
-      bps = bpm / 60f;
-      noteSpeed = bps * lengthPerBeat;
     }
 
     // Update is called once per frame
     void Update()
     {
-      if (!tutorializer.tutorializing && !menu.menuing) {
+      if (generating) {
         beatFrac += (Time.deltaTime * bps);
         if (beatFrac >= 1.0f) {
           beatFrac -= 1.0f;

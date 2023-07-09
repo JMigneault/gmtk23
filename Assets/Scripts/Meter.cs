@@ -9,7 +9,8 @@ public class Meter : MonoBehaviour
     public float speed = 1.0f;
     private float markerX = 0;
     private Transform marker;
-    public GameObject loseScreen = null;
+    public Menu menu;
+    public InstrumentController ic;
     int amount;
 
     void Start() {
@@ -27,9 +28,12 @@ public class Meter : MonoBehaviour
       amount -= a;
       if (amount <= 0) {
         amount = 0;
-        speed = 0;
         markerX = length * -0.5f;
-        loseScreen.SetActive(true);
+        menu.gameObject.SetActive(true);
+        ic.meter.Reset();
+        ic.music.Reset();
+        ic.Stop();
+        menu.EnableScore();
       }
     }
 
@@ -43,6 +47,7 @@ public class Meter : MonoBehaviour
     }
 
     public void Reset() {
+      markerX = 0;
       amount = capacity / 2;
     }
 }

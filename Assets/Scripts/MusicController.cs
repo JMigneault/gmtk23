@@ -23,9 +23,11 @@ public class MusicController : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    if (!started && !ic.tutorializer.tutorializing && !ic.menu.menuing) {
+    if (!started && ic.generating) {
       if (t >= delay) {
-        GetComponent<AudioSource>().Play();
+        Debug.Log(music.clip);
+        Debug.Log(music.mute);
+        music.Play();
         started = true;
       }
       t += Time.deltaTime;
@@ -56,5 +58,7 @@ public class MusicController : MonoBehaviour
   public void Reset() {
     music.clip = mainSong;
     music.volume = 1.0f;
+    music.Stop();
+    started = false;
   }
 }

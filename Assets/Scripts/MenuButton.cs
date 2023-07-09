@@ -38,10 +38,12 @@ public class MenuButton : MonoBehaviour
         case bType.PLAY:
           mc.menuing = false;
           mc.gameObject.SetActive(false);
+          mc.ic.StartGenerating();
         break;
         case bType.TUTORIAL:
-          // TODO
+          mc.menuing = false;
           mc.gameObject.SetActive(false);
+          mc.ic.tutorializer.StartTutorial();
         break;
         case bType.CREDITS:
           mc.EnableCredits();

@@ -75,24 +75,21 @@ public class Tutorializer : MonoBehaviour
   public TutorialEvent[] events;
   private int i = 0;
   public bool tutorializing = false;
-  public GameObject ivoryAlone = null;
 
   private int realBpm;
   private float realNf;
 
   void Start() {
-    ivoryAlone.SetActive(false);
-
     StartTutorial(); // TODO TEMP
   }
 
   public void StartTutorial() {
+    gameObject.SetActive(true);
     tutorializing = true;
-    ivoryAlone.SetActive(true);
     events[0].Start(ic);
     realBpm = ic.bpm;
     realNf = ic.noteFrequency;
-    ic.bpm = 240;
+    ic.SetBpm(240);
     ic.noteFrequency = 1.0f;
     ic.music.music.volume = .25f;
   }
@@ -102,14 +99,17 @@ public class Tutorializer : MonoBehaviour
       if (events[i].Ready()) {
         if (events[i].done || Input.GetMouseButtonDown(0)) {
           events[i].End(ic);
-          if (++i >= events.Length) {
+          if (++i >= events.Length) { // tutorial finished
+            // RESET
             ic.meter.Reset(); // TODO: other reset?
             ic.music.Reset();
-            tutorializing = false;
-            ivoryAlone.SetActive(false);
-            ic.bpm = realBpm;
+            ic.SetBpm(realBpm);
             ic.noteFrequency = realNf;
-            Debug.Log("TUTORIAL COMPLETE");
+            
+            ic.menu.gameObject.SetActive(true);
+            ic.menu.menuing = true;
+            tutorializing = false;
+            gameObject.SetActive(false);
             return;
           }
           events[i].Start(ic);
