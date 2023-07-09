@@ -42,7 +42,6 @@ using UnityEngine;
   }
 
   public void Do(InstrumentController ic) {
-    Debug.Log("do");
     t -= Time.deltaTime;
     AudioSource a = ic.music.music;
     if (music != null && mt >= 0) {
@@ -111,7 +110,7 @@ public class Tutorializer : MonoBehaviour
 
     float xOff = 0.0f;
 
-    while (remaining > 0) {
+    while (remaining > 0 || (score == 0 && xOff > -1)) { // WOW SO HACK
       int nextDigit = remaining % 10;
       Debug.Log("Rendering digit " + nextDigit);
       GameObject d = Instantiate(digit, currScoreContainer.transform);
@@ -120,7 +119,6 @@ public class Tutorializer : MonoBehaviour
       xOff -= 4.5f;
       remaining = remaining / 10;
     }
-
   }
 
   void Update() {
@@ -133,6 +131,7 @@ public class Tutorializer : MonoBehaviour
             ic.Reset();
             ic.SetBpm(realBpm);
             ic.noteFrequency = realNf;
+            i = 0;
             
             ic.menu.gameObject.SetActive(true);
             ic.menu.menuing = true;
@@ -141,6 +140,10 @@ public class Tutorializer : MonoBehaviour
             if (decoration) {
               decoration.SetActive(false);
             }
+            if (currScoreContainer) {
+              Destroy(currScoreContainer);
+              currScoreContainer = null;
+            }
             gameObject.SetActive(false);
             return;
           }
@@ -148,10 +151,6 @@ public class Tutorializer : MonoBehaviour
         }
       } else {
         events[i].Do(ic);
-      }
-    } else {
-      if (currScoreContainer) { // SO HACKY
-        Destroy(currScoreContainer);
       }
     }
   }
