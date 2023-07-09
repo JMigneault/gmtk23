@@ -46,11 +46,13 @@ public class MenuButton : MonoBehaviour
           case bType.PLAY:
             mc.menuing = false;
             mc.gameObject.SetActive(false);
+            mc.Stop();
             mc.ic.StartGenerating();
           break;
           case bType.TUTORIAL:
             mc.menuing = false;
             mc.gameObject.SetActive(false);
+            mc.Stop();
             mc.ic.tutorializer.StartTutorial();
           break;
           case bType.CREDITS:

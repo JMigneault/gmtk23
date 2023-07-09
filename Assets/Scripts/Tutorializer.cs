@@ -77,6 +77,12 @@ public class Tutorializer : MonoBehaviour
   public bool tutorializing = false;
   public GameObject decoration = null;
 
+  public Sprite[] digits = null;
+  public GameObject scoreContainer = null;
+  public Transform superScoreContainer = null;
+  private GameObject currScoreContainer = null;
+  public GameObject digit = null;
+
 
   private int realBpm;
   private float realNf;
@@ -99,6 +105,26 @@ public class Tutorializer : MonoBehaviour
     ic.music.music.volume = .25f;
   }
 
+  public void SetScore(int score, Transform parentSeq) {
+    Debug.Log("Setting score");
+
+    currScoreContainer = Instantiate(scoreContainer, superScoreContainer);
+    int remaining = score;
+
+    float xOff = 0.0f;
+
+    while (remaining > 0) {
+      int nextDigit = remaining % 10;
+      Debug.Log("Rendering digit " + nextDigit);
+      GameObject d = Instantiate(digit, currScoreContainer.transform);
+      d.transform.localPosition = d.transform.localPosition + new Vector3(xOff, 0, 0);;
+      d.GetComponent<SpriteRenderer>().sprite = digits[nextDigit];
+      xOff -= 4.5f;
+      remaining = remaining / 10;
+    }
+
+  }
+
   void Update() {
     if (tutorializing) {
       if (events[i].Ready()) {
@@ -112,6 +138,7 @@ public class Tutorializer : MonoBehaviour
             
             ic.menu.gameObject.SetActive(true);
             ic.menu.menuing = true;
+            ic.menu.Play();
             tutorializing = false;
             if (decoration) {
               decoration.SetActive(false);
@@ -123,6 +150,10 @@ public class Tutorializer : MonoBehaviour
         }
       } else {
         events[i].Do(ic);
+      }
+    } else {
+      if (currScoreContainer) { // SO HACKY
+        // Destroy(currScoreContainer);
       }
     }
   }

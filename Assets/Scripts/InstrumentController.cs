@@ -43,6 +43,7 @@ public class InstrumentController : MonoBehaviour
     private int numCorrect = 0;
     private int totalNum = 0;
     private int numGenerated = 0;
+    private int numMutedCorrectly = 0;
 
     public Meter meter;
 
@@ -58,6 +59,9 @@ public class InstrumentController : MonoBehaviour
     public bool generating = false;
     public GameObject decoration = null;
     public GameObject decoration2 = null;
+
+    public Tutorializer wonSeq = null;
+    public Tutorializer loseSeq = null;
 
     // Our instrument has strings, but C# doesn't have variables named "string". So in this fun alternate universe
     // our instrument has "strangs".
@@ -100,6 +104,7 @@ public class InstrumentController : MonoBehaviour
         n.StartPlayedCorrectlyAnim();
         meter.Correct(pcMeter);
       } else if (!shouldPlay && !didPlay) { // note muted correctly
+        numMutedCorrectly++;
         n.StartMutedCorrectlyAnim();
         meter.Correct(mcMeter);
       } else if (shouldPlay && !didPlay) { // note muted incorrectly
@@ -137,7 +142,6 @@ public class InstrumentController : MonoBehaviour
       foreach (NoteController c in GetComponentsInChildren<NoteController>()) {
         Destroy(c.gameObject);
       }
-
     }
 
     public void Reset() {
@@ -146,14 +150,20 @@ public class InstrumentController : MonoBehaviour
       totalNum = 0;
       numCorrect = 0;
       numGenerated = 0;
+      numMutedCorrectly = 0;
       Stop();
     }
 
     public void GameDone(bool won) {
+      int nmc = numMutedCorrectly;
       Reset();
-      menu.gameObject.SetActive(true);
-      menu.EnableScore();
-      // TODO
+      if (won) {
+        wonSeq.SetScore(nmc, wonSeq.transform);
+        wonSeq.StartTutorial();
+      } else {
+        loseSeq.SetScore(nmc, loseSeq.transform);
+        loseSeq.StartTutorial();
+      }
     }
 
     // Start is called before the first frame update
