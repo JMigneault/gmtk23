@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Ivory : MonoBehaviour
 {
-  public float frameLength = 0.5f;
+  public float frame1Length = 0.5f;
+  public float frame2Length = 0.5f;
   public Sprite f1;
   public Sprite f2;
   private bool onFirst = true;
@@ -19,15 +20,14 @@ public class Ivory : MonoBehaviour
     void Update()
     {
       t += Time.deltaTime;
-      if (t >= frameLength) {
+      if (onFirst && t >= frame1Length) {
         t = 0f;
-        onFirst = !onFirst;
-        if (onFirst) {
-          GetComponent<SpriteRenderer>().sprite = f1;
-        } else {
-          GetComponent<SpriteRenderer>().sprite = f2;
-        }
+        onFirst = false;
+        GetComponent<SpriteRenderer>().sprite = f2;
+      } else if (!onFirst && t >= frame2Length) {
+        t = 0f;
+        onFirst = true;
+        GetComponent<SpriteRenderer>().sprite = f1;
       }
-
     }
 }

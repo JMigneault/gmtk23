@@ -16,13 +16,14 @@ public class MusicController : MonoBehaviour
   public AudioSource music;
   public AudioSource sounds;
 
+  public AudioClip mainSong;
   public AudioClip[] mistakeClips;
   public AudioClip mutedClip;
 
   // Update is called once per frame
   void Update()
   {
-    if (!started && !ic.tutorializer.tutorializing) {
+    if (!started && !ic.tutorializer.tutorializing && !ic.menu.menuing) {
       if (t >= delay) {
         GetComponent<AudioSource>().Play();
         started = true;
@@ -50,5 +51,10 @@ public class MusicController : MonoBehaviour
     muteT = 0;
     sounds.clip = mutedClip;
     sounds.Play();
+  }
+
+  public void Reset() {
+    music.clip = mainSong;
+    music.volume = 1.0f;
   }
 }

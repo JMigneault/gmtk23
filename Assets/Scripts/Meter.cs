@@ -36,7 +36,7 @@ public class Meter : MonoBehaviour
     void Update() {
       float targetX = ((amount / (float)capacity) - 0.5f) * length;
       float dx = targetX - markerX;
-      if (Mathf.Abs(dx) > Mathf.Epsilon) {
+      if (Mathf.Abs(dx) > .1) {
         markerX += ((dx > 0) ? speed : -speed) * Time.deltaTime;
       }
       marker.localPosition = new Vector3(markerX, marker.localPosition.y, marker.localPosition.z);

@@ -12,7 +12,7 @@ using UnityEngine;
   public float finalDelay = 2.0f;
   private float t = 0.0f;
   private float mt = 0.0f;
-  private bool done = false;
+  public bool done = false;
   public bool muteStrings = false;
   public AudioClip music = null;
   public bool flipped = false;
@@ -20,10 +20,10 @@ using UnityEngine;
   public TutorialEvent() { }
 
   public bool Ready() {
-    return noteColors == null || done;
+    return noteColors.Length == 0 || done;
   }
 
-  public void Start(InstrumentController ic, AudioSource a) {
+  public void Start(InstrumentController ic) {
     mt = musicDelay;
     if (text != null) {
       text.SetActive(true);
@@ -34,15 +34,17 @@ using UnityEngine;
     }
   }
 
-  public void End(InstrumentController ic, AudioSource a) {
+  public void End(InstrumentController ic) {
     if (text) { text.SetActive(false); }
     if (muteStrings) {
       ic.SetStrangMuted(3, false);
     }
   }
 
-  public void Do(InstrumentController ic, AudioSource a) {
+  public void Do(InstrumentController ic) {
+    Debug.Log("do");
     t -= Time.deltaTime;
+    AudioSource a = ic.music.music;
     if (music != null && mt >= 0) {
       mt -= Time.deltaTime;
       if (mt < 0) {
@@ -59,7 +61,9 @@ using UnityEngine;
           t = noteDelay;
         }
       } else {
-        done = true;
+        if (noteColors.Length > 0) {
+          done = true;
+        }
       }
     }
   }
@@ -68,7 +72,6 @@ using UnityEngine;
 public class Tutorializer : MonoBehaviour
 {
   public InstrumentController ic;
-  private AudioSource a;
   public TutorialEvent[] events;
   private int i = 0;
   public bool tutorializing = false;
@@ -78,7 +81,6 @@ public class Tutorializer : MonoBehaviour
   private float realNf;
 
   void Start() {
-    a = GetComponent<AudioSource>();
     ivoryAlone.SetActive(false);
 
     StartTutorial(); // TODO TEMP
@@ -87,20 +89,22 @@ public class Tutorializer : MonoBehaviour
   public void StartTutorial() {
     tutorializing = true;
     ivoryAlone.SetActive(true);
-    events[0].Start(ic, a);
+    events[0].Start(ic);
     realBpm = ic.bpm;
     realNf = ic.noteFrequency;
     ic.bpm = 240;
     ic.noteFrequency = 1.0f;
+    ic.music.music.volume = .25f;
   }
 
   void Update() {
     if (tutorializing) {
       if (events[i].Ready()) {
-        if (Input.GetMouseButtonDown(0)) {
-          events[i].End(ic, a);
+        if (events[i].done || Input.GetMouseButtonDown(0)) {
+          events[i].End(ic);
           if (++i >= events.Length) {
             ic.meter.Reset(); // TODO: other reset?
+            ic.music.Reset();
             tutorializing = false;
             ivoryAlone.SetActive(false);
             ic.bpm = realBpm;
@@ -108,10 +112,10 @@ public class Tutorializer : MonoBehaviour
             Debug.Log("TUTORIAL COMPLETE");
             return;
           }
-          events[i].Start(ic, a);
+          events[i].Start(ic);
         }
       } else {
-        events[i].Do(ic, a);
+        events[i].Do(ic);
       }
     }
   }

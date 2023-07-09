@@ -50,6 +50,7 @@ public class InstrumentController : MonoBehaviour
 
     public Tutorializer tutorializer = null;
     public MusicController music = null;
+    public Menu menu = null;
 
     // Our instrument has strings, but C# doesn't have variables named "string". So in this fun alternate universe
     // our instrument has "strangs".
@@ -123,7 +124,7 @@ public class InstrumentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      if (!tutorializer.tutorializing) {
+      if (!tutorializer.tutorializing && !menu.menuing) {
         beatFrac += (Time.deltaTime * bps);
         if (beatFrac >= 1.0f) {
           beatFrac -= 1.0f;
