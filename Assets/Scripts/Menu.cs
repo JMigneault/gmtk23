@@ -15,13 +15,13 @@ public class Menu : MonoBehaviour
     public InstrumentController ic = null;
 
     public MusicController music;
-
-    void Start() {
-      // SetButtonsEnabled(false);
-    }
+    
+    // ugly hack so people don't press butons by accident while the curtain is down
+    bool transitioning = false;
+    float buttonDelay = 1.5f;
+    float t = 0.0f;
 
     void OnEnable() {
-      // SetButtonsEnabled(true);
       menuing = true;
       Play();
     }
@@ -46,18 +46,28 @@ public class Menu : MonoBehaviour
     }
 
     public void SetCreditsEnabled(bool enabled) {
+      t = 0.0f;
       creditsEnabled = enabled;
-      SetButtonsEnabled(!enabled);
       if (enabled) {
+        SetButtonsEnabled(false);
         ic.tm.Transition(null, credits);
       } else {
+        transitioning = true;
         ic.tm.Transition(credits, null);
       }
     }
 
     void Update() {
-      if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Escape)) {
-        if (creditsEnabled) {
+      if (transitioning) {
+        t += Time.deltaTime;
+        if (t >= buttonDelay) {
+          transitioning = false;
+          t = 0;
+          SetButtonsEnabled(true);
+        }
+      }
+      if (creditsEnabled) {
+        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Escape)) {
           SetCreditsEnabled(false);
         }
       }

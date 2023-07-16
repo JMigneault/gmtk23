@@ -61,11 +61,12 @@ public class TransitionManager : MonoBehaviour
   }
 
   public void Transition(GameObject before, GameObject after, bool openingSeq = false) {
+    Debug.Log("Transitioning from: " + before + " to: " + after);
     transitioning = true;
     this.before = before;
     this.after = after;
     if (openingSeq) {
-      speed = 35.0f;
+      speed = 20.0f;
       RaiseCurtain();
     } else {
       DropCurtain();

@@ -7,8 +7,6 @@ using UnityEngine;
   public int[] noteStrangs = null;
   public NColor[] noteColors = null;
   private int currNote = 0;
-  public float noteDelay = 0.5f;
-  public float musicDelay = 0.5f;
   public float finalDelay = 2.0f;
   private float t = 0.0f;
   private float mt = 0.0f;
@@ -23,13 +21,13 @@ using UnityEngine;
     return noteColors.Length == 0 || done;
   }
 
-  public void Start(InstrumentController ic) {
+  public void Start(InstrumentController ic, Tutorializer tut) {
     // Reset vars
     t = 0.0f;
     currNote = 0;
     done = false;
 
-    mt = musicDelay;
+    mt = tut.musicDelay;
     if (text != null) {
       text.SetActive(true);
       // To expand on the below comment, this relies on the topmost child of the tutorial object being Ivory.
@@ -50,7 +48,7 @@ using UnityEngine;
     }
   }
 
-  public void Do(InstrumentController ic) {
+  public void Do(InstrumentController ic, Tutorializer tut) {
     t -= Time.deltaTime;
     AudioSource a = ic.music.music;
     if (music != null && mt >= 0) {
@@ -66,7 +64,7 @@ using UnityEngine;
         if (++currNote == noteColors.Length) {
           t = finalDelay;
         } else {
-          t = noteDelay;
+          t = tut.noteDelay;
         }
       } else {
         if (noteColors.Length > 0) {
@@ -93,6 +91,9 @@ public class Tutorializer : MonoBehaviour
 
   public bool openingSeq = false;
 
+  public float noteDelay = 2.5f;
+  public float musicDelay = 1.0f;
+
   private int realBpm;
   private float realNf;
 
@@ -116,10 +117,10 @@ public class Tutorializer : MonoBehaviour
       decoration.SetActive(true);
     }
     tutorializing = true;
-    events[0].Start(ic);
+    events[0].Start(ic, this);
     realBpm = ic.bpm;
     realNf = ic.noteFrequency;
-    ic.SetBpm(120);
+    ic.SetBpm(134);
     ic.noteFrequency = 1.0f;
     ic.music.music.volume = .25f;
   }
@@ -157,10 +158,10 @@ public class Tutorializer : MonoBehaviour
             ic.tm.Transition(gameObject, ic.menu.gameObject, openingSeq);
             return;
           }
-          events[i].Start(ic);
+          events[i].Start(ic, this);
         }
       } else {
-        events[i].Do(ic);
+        events[i].Do(ic, this);
       }
     }
   }

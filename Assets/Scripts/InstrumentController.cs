@@ -98,7 +98,6 @@ public class InstrumentController : MonoBehaviour
     }
 
     public void SetBpm(int bpm) {
-      Debug.Log("setting bpm to: " + bpm);
       bps = bpm / 60f;
       noteSpeed = bps * lengthPerBeat;
     }
@@ -138,6 +137,7 @@ public class InstrumentController : MonoBehaviour
       decoration.SetActive(true);
       decoration2.SetActive(true);
       generating = true;
+      music.Reset();
     }
 
     public void Stop() {
@@ -160,6 +160,7 @@ public class InstrumentController : MonoBehaviour
       numCorrect = 0;
       numGenerated = 0;
       numMutedCorrectly = 0;
+      beatFrac = 0;
       // unmute strangs
       for (int i = 0; i < strangMuted.Length; i++) {
         SetStrangMuted(i, false);
@@ -196,7 +197,6 @@ public class InstrumentController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-      Debug.Log("starting ic");
       strangMuted = new bool[4];
       lengthPerBeat = totalLength / nBeats;
       SetBpm(bpm);
@@ -208,7 +208,6 @@ public class InstrumentController : MonoBehaviour
     {
       if (generating) {
         if (totalNum >= levelLengthBeats) {
-          Debug.Log("beat game");
           GameDone(true);
         }
         if (numGenerated < levelLengthBeats) {
