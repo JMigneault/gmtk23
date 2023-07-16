@@ -23,7 +23,7 @@ public class InstrumentController : MonoBehaviour
     public float totalLength = 55f; // 100 units length
     public float strangHeight = 2f;
 
-    public int levelLengthBeats = 210;
+    public int levelLengthBeats = 105;
 
     public GameObject notePrefab;
     public float correctProb = .8f;

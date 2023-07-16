@@ -4936,7 +4936,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delay: 4.8
-  muteTime: 0.5
+  muteTime: 0.2
   mmFadeTime: 3
   ic: {fileID: 900148265}
   music: {fileID: 908307076}
@@ -13168,6 +13168,10 @@ PrefabInstance:
     - target: {fileID: 476132770399418455, guid: 9f08bf5fcae1e2445a451a7aa9b0d48b, type: 3}
       propertyPath: noteFrequency
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 476132770399418455, guid: 9f08bf5fcae1e2445a451a7aa9b0d48b, type: 3}
+      propertyPath: levelLengthBeats
+      value: 102
       objectReference: {fileID: 0}
     - target: {fileID: 476132770399418455, guid: 9f08bf5fcae1e2445a451a7aa9b0d48b, type: 3}
       propertyPath: strangKeys.Array.size
