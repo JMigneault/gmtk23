@@ -64,6 +64,9 @@ public class InstrumentController : MonoBehaviour
     public Tutorializer loseSeq = null;
 
     public TransitionManager tm = null;
+    public GameObject playStarter = null;
+
+    private bool paused = false;
 
     // Our instrument has strings, but C# doesn't have variables named "string". So in this fun alternate universe
     // our instrument has "strangs".
@@ -95,6 +98,7 @@ public class InstrumentController : MonoBehaviour
     }
 
     public void SetBpm(int bpm) {
+      Debug.Log("setting bpm to: " + bpm);
       bps = bpm / 60f;
       noteSpeed = bps * lengthPerBeat;
     }
@@ -123,7 +127,6 @@ public class InstrumentController : MonoBehaviour
       if (shouldPlay == didPlay) {
         numCorrect++;
       }
-      // Debug.Log(numCorrect + "/" + totalNum);
     }
 
     public void SetStrangMuted(int strang, bool muted) {
@@ -147,17 +150,21 @@ public class InstrumentController : MonoBehaviour
     }
 
     public void Reset() {
-      meter.Reset();
-      music.Reset();
+      if (meter) {
+        meter.Reset();
+      }
+      if (music) {
+        music.Reset();
+      }
       totalNum = 0;
       numCorrect = 0;
       numGenerated = 0;
       numMutedCorrectly = 0;
-      Stop();
       // unmute strangs
       for (int i = 0; i < strangMuted.Length; i++) {
         SetStrangMuted(i, false);
       }
+      paused = false;
     }
 
     public void GameDone(bool won) {
@@ -165,18 +172,35 @@ public class InstrumentController : MonoBehaviour
       Reset();
       if (won) {
         wonSeq.SetScore(nmc, wonSeq.transform);
-        wonSeq.StartTutorial();
+        tm.Transition(playStarter, wonSeq.gameObject);
       } else {
         loseSeq.SetScore(nmc, loseSeq.transform);
-        loseSeq.StartTutorial();
+        tm.Transition(playStarter, loseSeq.gameObject);
+      }
+    }
+
+    public void TutorialPauseNotes() {
+      paused = true;
+      foreach (NoteController c in GetComponentsInChildren<NoteController>()) {
+        c.Pause();
+      }
+    }
+
+    public void TutorialResumeNotes() {
+      paused = false;
+      foreach (NoteController c in GetComponentsInChildren<NoteController>()) {
+        c.Unpause();
       }
     }
 
     // Start is called before the first frame update
     void Start()
     {
+      Debug.Log("starting ic");
       strangMuted = new bool[4];
       lengthPerBeat = totalLength / nBeats;
+      SetBpm(bpm);
+      Reset();
     }
 
     // Update is called once per frame
@@ -184,6 +208,7 @@ public class InstrumentController : MonoBehaviour
     {
       if (generating) {
         if (totalNum >= levelLengthBeats) {
+          Debug.Log("beat game");
           GameDone(true);
         }
         if (numGenerated < levelLengthBeats) {

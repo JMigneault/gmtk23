@@ -152,7 +152,7 @@ MonoBehaviour:
   - {fileID: -2100892341, guid: 5af986ff9a666cc438486feaf30d861e, type: 3}
   - {fileID: 2004731858, guid: 5af986ff9a666cc438486feaf30d861e, type: 3}
   mcLength: 0.5
-  mcHoleX: -2.13
+  mcHoleX: 2.43
   mcFadeProp: 0.3
   mcWaitProp: 0.15
   mcGoldSprite: {fileID: 966661129, guid: 3c1dfc801b0cd8f4d88bbc115634f3d5, type: 3}

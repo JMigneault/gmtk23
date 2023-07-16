@@ -7,9 +7,6 @@ public class Menu : MonoBehaviour
 
     public bool menuing = false;
 
-    private bool tToPlay = false;
-    private bool tToTutorial = false;
-
     public TransitionManager curtains;
 
     public GameObject credits = null;
@@ -19,9 +16,20 @@ public class Menu : MonoBehaviour
 
     public MusicController music;
 
-    // transition objects
-    public GameObject playTO;
-    public GameObject tutorialTO;
+    void Start() {
+      // SetButtonsEnabled(false);
+    }
+
+    void OnEnable() {
+      // SetButtonsEnabled(true);
+      menuing = true;
+      Play();
+    }
+
+    void OnDisable() {
+      menuing = false;
+      Stop();
+    }
 
     public void Play() {
       music.menuMusic.Play();
@@ -45,7 +53,6 @@ public class Menu : MonoBehaviour
       } else {
         ic.tm.Transition(credits, null);
       }
-
     }
 
     void Update() {

@@ -19,10 +19,11 @@ public class TransitionManager : MonoBehaviour
 
   public Transform curtain;
   public float speed = 1.0f;
+  private float originalSpeed = 1.0f;
   public float waitTime = 0.5f;
 
-  private float progress = 0.0f;
-  public float dist = 31.0f;
+  public float upY = 35.0f;
+  public float downY = 0.0f;
 
   private curt s = curt.STILL;
 
@@ -30,58 +31,75 @@ public class TransitionManager : MonoBehaviour
   private GameObject after = null;
   bool transitioning = false;
 
+  float t = 0.0f;
+
+  void Start() {
+    originalSpeed = speed;
+  }
+
   private void Reset() {
+    t = 0.0f;
     s = curt.STILL;
     before = null;
     after = null;
     transitioning = false;
+    speed = originalSpeed;
   }
 
   public void DropCurtain() {
-    progress = 0.0f;
     s = curt.LOWERING;
   }
 
   public void RaiseCurtain() {
-    progress = 0.0f;
+    if (before != null) {
+      before.SetActive(false);
+    }
+    if (after != null) {
+      after.SetActive(true);
+    }
     s = curt.RAISING;
   }
 
-  public void Transition(GameObject before, GameObject after) {
+  public void Transition(GameObject before, GameObject after, bool openingSeq = false) {
     transitioning = true;
     this.before = before;
     this.after = after;
-    DropCurtain();
+    if (openingSeq) {
+      speed = 35.0f;
+      RaiseCurtain();
+    } else {
+      DropCurtain();
+    }
   }
 
   // Update is called once per frame
   void Update()
   {
-    if (s == curt.WAITING) {
-      progress += Time.deltaTime;
-      if (progress >= waitTime) {
+    float dp = speed * Time.deltaTime;
+
+    switch (s) {
+    case curt.STILL:
+      break;
+    case curt.WAITING:
+      t += Time.deltaTime;
+      if (t >= waitTime) {
+        t = 0.0f;
         RaiseCurtain();
       }
-    }
-    if (s == curt.LOWERING || s == curt.RAISING) {
-      int dir = (s == curt.LOWERING) ? -1 : 1;
-      float d = speed * Time.deltaTime;
-      progress += d;
-      curtain.position = new Vector3(curtain.position.x, curtain.position.y + (d * dir), curtain.position.z);
-      if (progress >= dist) {
-        if (transitioning && s == curt.LOWERING) {
-          if (before != null) {
-            before.SetActive(false);
-          }
-          if (after != null) {
-            after.SetActive(true);
-          }
-          progress = 0;
-          s = curt.WAITING;
-        } else {
-          Reset();
-        }
+      break;
+    case curt.LOWERING:
+      curtain.position = new Vector3(curtain.position.x, curtain.position.y - dp, curtain.position.z);
+      if (curtain.localPosition.y <= downY) {
+        s = curt.WAITING;
       }
+      break;
+    case curt.RAISING:
+      curtain.position = new Vector3(curtain.position.x, curtain.position.y + dp, curtain.position.z);
+      if (curtain.localPosition.y >= upY) {
+        s = curt.STILL;
+        Reset();
+      }
+      break;
     }
   }
 }

@@ -44,6 +44,8 @@ public class NoteController : MonoBehaviour
     public Vector3 mcTarget = new Vector3(1.688f, 11.372f, 0f);
     private float mcSpeed = 0.0f;
 
+    private bool paused = false;
+
     public void Init(int strang, NColor col, InstrumentController ic) {
       sr = GetComponentInChildren<SpriteRenderer>();
       float ypos = (strang - 1.5f) * ic.strangHeight;
@@ -58,7 +60,7 @@ public class NoteController : MonoBehaviour
     public void StartPlayedCorrectlyAnim() {
       pcStart = true;
       speed = 0.0f;
-      transform.position = new Vector3(0.0f, transform.position.y, transform.position.z);
+      transform.position = new Vector3(mcHoleX, transform.position.y, transform.position.z);
       float s = pcMaxScale;
       transform.localScale = new Vector3(s, s, s);
     }
@@ -99,7 +101,7 @@ public class NoteController : MonoBehaviour
     public void StartPlayedIncorrectlyAnim() {
       piStart = true;
       speed = 0.0f;
-      transform.position = new Vector3(0.0f, transform.position.y, transform.position.z);
+      transform.position = new Vector3(mcHoleX, transform.position.y, transform.position.z);
       sr.sprite = piF1Sprites[(int)color];
     }
 
@@ -141,29 +143,41 @@ public class NoteController : MonoBehaviour
       }
     }
 
+    public void Pause() {
+      Debug.Log("note was paused");
+      paused = true;
+    }
+
+    public void Unpause() {
+      Debug.Log("note was unpaused");
+      paused = false;
+    }
+
     // Update is called once per frame
     void Update()
     {
-      Vector3 currPos = this.transform.position;
-      transform.position = new Vector3(currPos.x - speed * Time.deltaTime, currPos.y + speedY * Time.deltaTime, currPos.z);
-      if (!played && transform.position.x <= 0) {
-        ic.PlayNote(this);
-        played = true;
-      }
-      if (transform.position.x <= -5) { // kys
-        Destroy(gameObject);
-      }
-      if (pcStart) {
-        PlayedCorrectlyAnim();
-      }
-      if (miStart) {
-        MutedIncorrectlyAnim();
-      }
-      if (piStart) {
-        PlayedIncorrectlyAnim();
-      }
-      if (mcStart) {
-        MutedCorrectlyAnim();
+      if (!paused) {
+        Vector3 currPos = this.transform.position;
+        transform.position = new Vector3(currPos.x - speed * Time.deltaTime, currPos.y + speedY * Time.deltaTime, currPos.z);
+        if (!played && transform.position.x <= mcHoleX) {
+          ic.PlayNote(this);
+          played = true;
+        }
+        if (transform.position.x <= -5) { // kys
+          Destroy(gameObject);
+        }
+        if (pcStart) {
+          PlayedCorrectlyAnim();
+        }
+        if (miStart) {
+          MutedIncorrectlyAnim();
+        }
+        if (piStart) {
+          PlayedIncorrectlyAnim();
+        }
+        if (mcStart) {
+          MutedCorrectlyAnim();
+        }
       }
     }
 }

@@ -23,7 +23,6 @@ public class MenuButton : MonoBehaviour
     }
 
     public void OnMouseDown() {
-      Debug.Log("down");
       pressed = true;
     }
 
@@ -32,26 +31,17 @@ public class MenuButton : MonoBehaviour
       sc.SetMuted(true);
     }
 
-    void Leave() {
-      mc.menuing = false;
-      mc.Stop();
-    }
-
     public void OnMouseExit() {
       GetComponent<SpriteRenderer>().sprite = normalSprite;
       sc.SetMuted(false);
     }
 
     void TransitionToTutorial() {
-      Leave();
-      mc.ic.tutorializer.StartTutorial();
-      mc.ic.tm.Transition(mc.gameObject, mc.tutorialTO);
+      mc.ic.tm.Transition(mc.gameObject, mc.ic.tutorializer.gameObject);
     }
 
     void TransitionToGame() {
-      Leave();
-      mc.ic.StartGenerating();
-      mc.ic.tm.Transition(mc.gameObject, mc.playTO);
+      mc.ic.tm.Transition(mc.gameObject, mc.ic.playStarter);
     }
 
     void TransitionToCredits() {

@@ -40,6 +40,7 @@ using UnityEngine;
     if (muteStrings) {
       ic.SetStrangMuted(3, true);
     }
+
   }
 
   public void End(InstrumentController ic) {
@@ -92,18 +93,25 @@ public class Tutorializer : MonoBehaviour
 
   public bool openingSeq = false;
 
-
   private int realBpm;
   private float realNf;
 
-  void Start() {
-    if (openingSeq) {
-      StartTutorial();
+  void OnEnable() {
+    StartTutorial();
+  }
+
+  void OnDisable() {
+    if (decoration) {
+      decoration.SetActive(false);
+    }
+    if (currScoreContainer) {
+      Destroy(currScoreContainer);
+      currScoreContainer = null;
     }
   }
 
   public void StartTutorial() {
-    gameObject.SetActive(true);
+    Debug.Log("Starting tutorial");
     if (decoration) {
       decoration.SetActive(true);
     }
@@ -111,7 +119,7 @@ public class Tutorializer : MonoBehaviour
     events[0].Start(ic);
     realBpm = ic.bpm;
     realNf = ic.noteFrequency;
-    ic.SetBpm(240);
+    ic.SetBpm(120);
     ic.noteFrequency = 1.0f;
     ic.music.music.volume = .25f;
   }
@@ -139,24 +147,14 @@ public class Tutorializer : MonoBehaviour
         if (events[i].done || Input.GetMouseButtonDown(0)) {
           events[i].End(ic);
           if (++i >= events.Length) { // tutorial finished
+            Debug.Log("Finishing Tutorial");
             // RESET
             ic.Reset();
             ic.SetBpm(realBpm);
             ic.noteFrequency = realNf;
             i = 0;
-            
-            ic.menu.gameObject.SetActive(true);
-            ic.menu.menuing = true;
-            ic.menu.Play();
             tutorializing = false;
-            if (decoration) {
-              decoration.SetActive(false);
-            }
-            if (currScoreContainer) {
-              Destroy(currScoreContainer);
-              currScoreContainer = null;
-            }
-            gameObject.SetActive(false);
+            ic.tm.Transition(gameObject, ic.menu.gameObject, openingSeq);
             return;
           }
           events[i].Start(ic);
