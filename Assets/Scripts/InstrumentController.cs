@@ -74,8 +74,8 @@ public class InstrumentController : MonoBehaviour
       }
     }
 
-    void GenerateRandomNote() {
-      bool correctNote = Random.Range(0.0f, 1.0f) < correctProb;
+    void GenerateRandomNote(bool forceCorrect) {
+      bool correctNote = forceCorrect || (Random.Range(0.0f, 1.0f) < correctProb);
       int strang = Random.Range(0, 4);
       if (correctNote) {
         MakeNote(strang, (NColor) strang, false);
@@ -190,7 +190,7 @@ public class InstrumentController : MonoBehaviour
             beatFrac -= 1.0f;
             currBeat += 1;
             if (currBeat % noteFrequency == 0) {
-              GenerateRandomNote();
+              GenerateRandomNote(numGenerated < 4);
               numGenerated++;
             }
           }
