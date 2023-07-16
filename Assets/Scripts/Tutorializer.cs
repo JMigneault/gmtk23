@@ -82,12 +82,16 @@ public class Tutorializer : MonoBehaviour
   private GameObject currScoreContainer = null;
   public GameObject digit = null;
 
+  public bool openingSeq = false;
+
 
   private int realBpm;
   private float realNf;
 
   void Start() {
-    StartTutorial(); // TODO TEMP
+    if (openingSeq) {
+      StartTutorial();
+    }
   }
 
   public void StartTutorial() {

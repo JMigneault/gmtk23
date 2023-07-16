@@ -3038,6 +3038,7 @@ MonoBehaviour:
   scoreContainer: {fileID: 6249350894888945237, guid: af7145ca7e32a4f48b4f854909918a1c, type: 3}
   superScoreContainer: {fileID: 2032916750}
   digit: {fileID: 3168139375214051921, guid: e85a582c5c8e62344bd18517f49bc7b1, type: 3}
+  openingSeq: 0
 --- !u!1 &474160733
 GameObject:
   m_ObjectHideFlags: 0
@@ -8814,6 +8815,7 @@ MonoBehaviour:
   scoreContainer: {fileID: 6249350894888945237, guid: af7145ca7e32a4f48b4f854909918a1c, type: 3}
   superScoreContainer: {fileID: 604958538}
   digit: {fileID: 3168139375214051921, guid: e85a582c5c8e62344bd18517f49bc7b1, type: 3}
+  openingSeq: 0
 --- !u!1 &1486607041
 GameObject:
   m_ObjectHideFlags: 0
@@ -9948,6 +9950,7 @@ MonoBehaviour:
   scoreContainer: {fileID: 0}
   superScoreContainer: {fileID: 0}
   digit: {fileID: 0}
+  openingSeq: 0
 --- !u!4 &1640713689
 Transform:
   m_ObjectHideFlags: 0
@@ -10900,6 +10903,7 @@ MonoBehaviour:
   scoreContainer: {fileID: 0}
   superScoreContainer: {fileID: 0}
   digit: {fileID: 0}
+  openingSeq: 1
 --- !u!4 &1752805435
 Transform:
   m_ObjectHideFlags: 0
