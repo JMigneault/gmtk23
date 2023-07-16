@@ -25,7 +25,6 @@ public class NoteController : MonoBehaviour
     public float pcMaxScale = 1.5f;
 
     private bool miStart = false;
-    private bool miRunAnim = false;
     private float miLength = 1.0f;
     private float miNextRot;
     public float miRotProp = 0.25f;
@@ -38,7 +37,6 @@ public class NoteController : MonoBehaviour
 
     public float mcLength = 1.5f;
     private bool mcStart = false;
-    private bool mcRunAnim = false;
     public float mcHoleX = -2.13f;
     public float mcFadeProp = 0.3f; // the proportion of the beginning of the animation that we fade during
     public float mcWaitProp = 0.15f;
@@ -76,31 +74,25 @@ public class NoteController : MonoBehaviour
 
     public void StartMutedIncorrectlyAnim() {
       miStart = true;
+      sr.color = Color.black;
+      speed /= 4.0f;
+      speedY = -1.5f; // TODO param
+      miNextRot = miRotProp;
     }
 
     void MutedIncorrectlyAnim() {
-      if (!miRunAnim) {
-        if (transform.position.x <= mcHoleX) {
-          miRunAnim = true;
-          sr.color = Color.black;
-          speed /= 4.0f;
-          speedY = -1.5f; // TODO param
-          miNextRot = miRotProp;
-        }
-      } else {
-        float animPropProgress = animT / miLength;
-        miNextRot -= Time.deltaTime / miLength;
+      float animPropProgress = animT / miLength;
+      miNextRot -= Time.deltaTime / miLength;
 
-        if (miNextRot <= 0) {
-          transform.eulerAngles = transform.eulerAngles - new Vector3(0, 0, 90.0f);
-          miNextRot = miRotProp;
-        }
+      if (miNextRot <= 0) {
+        transform.eulerAngles = transform.eulerAngles - new Vector3(0, 0, 90.0f);
+        miNextRot = miRotProp;
+      }
 
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1 - animPropProgress);
-        animT += Time.deltaTime;
-        if (animT > miLength) {
-          Destroy(gameObject);
-        }
+      sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1 - animPropProgress);
+      animT += Time.deltaTime;
+      if (animT > miLength) {
+        Destroy(gameObject);
       }
     }
 
@@ -125,35 +117,27 @@ public class NoteController : MonoBehaviour
 
     public void StartMutedCorrectlyAnim() {
       mcStart = true;
+      sr.sprite = mcGoldSprite;
+      speed = 0;
+      float totalTime = mcLength * (1.0f - mcWaitProp); // this is annoying
+      mcSpeed = (mcTarget - transform.position).magnitude / totalTime;
     }
 
     void MutedCorrectlyAnim() {
-      if (!mcRunAnim) {
-        if (transform.position.x <= mcHoleX) {
-          mcRunAnim = true;
-          sr.sprite = mcGoldSprite;
-          speed = 0;
-          float totalTime = mcLength * (1.0f - mcWaitProp); // this is annoying
-          mcSpeed = (mcTarget - transform.position).magnitude / totalTime;
-        }
-      } else {
-        // TODO FADE
-        float animPropProgress = animT / mcLength;
-        float alpha = (animPropProgress >= mcFadeProp) ? 1 : (1 - (animPropProgress / mcFadeProp)) / 2.0f + 0.5f;
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);
-        if (animPropProgress >= mcWaitProp) {
-          Vector3 toTarget = mcTarget - transform.position;
-          if (toTarget.magnitude < Mathf.Epsilon) {
-            // TODO
-            Destroy(gameObject);
-          }
-          Vector3 dir = (mcTarget - transform.position).normalized;
-          transform.position = transform.position + dir * mcSpeed * Time.deltaTime;
-        }
-        animT += Time.deltaTime;
-        if (animT > mcLength) {
+      float animPropProgress = animT / mcLength;
+      float alpha = (animPropProgress >= mcFadeProp) ? 1 : (1 - (animPropProgress / mcFadeProp)) / 2.0f + 0.5f;
+      sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);
+      if (animPropProgress >= mcWaitProp) {
+        Vector3 toTarget = mcTarget - transform.position;
+        if (toTarget.magnitude < Mathf.Epsilon) {
           Destroy(gameObject);
         }
+        Vector3 dir = (mcTarget - transform.position).normalized;
+        transform.position = transform.position + dir * mcSpeed * Time.deltaTime;
+      }
+      animT += Time.deltaTime;
+      if (animT > mcLength) {
+        Destroy(gameObject);
       }
     }
 
