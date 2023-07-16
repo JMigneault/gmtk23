@@ -24,9 +24,17 @@ using UnityEngine;
   }
 
   public void Start(InstrumentController ic) {
+    // Reset vars
+    t = 0.0f;
+    currNote = 0;
+    done = false;
+
     mt = musicDelay;
     if (text != null) {
       text.SetActive(true);
+      // To expand on the below comment, this relies on the topmost child of the tutorial object being Ivory.
+      // If she's not, then we'll flip some random object as she talks. It would be better if we had a pointer
+      // ivory. It would also be better if tutorials were prefabbed so there was only one Ivory hanging around.
       text.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().flipX = flipped; // horrible coding; eek!
     }
     if (muteStrings) {
