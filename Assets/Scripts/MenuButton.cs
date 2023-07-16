@@ -32,9 +32,30 @@ public class MenuButton : MonoBehaviour
       sc.SetMuted(true);
     }
 
+    void Leave() {
+      mc.menuing = false;
+      mc.Stop();
+    }
+
     public void OnMouseExit() {
       GetComponent<SpriteRenderer>().sprite = normalSprite;
       sc.SetMuted(false);
+    }
+
+    void TransitionToTutorial() {
+      Leave();
+      mc.ic.tutorializer.StartTutorial();
+      mc.ic.tm.Transition(mc.gameObject, mc.tutorialTO);
+    }
+
+    void TransitionToGame() {
+      Leave();
+      mc.ic.StartGenerating();
+      mc.ic.tm.Transition(mc.gameObject, mc.playTO);
+    }
+
+    void TransitionToCredits() {
+      mc.SetCreditsEnabled(true);
     }
 
     public void OnMouseUp() {
@@ -44,19 +65,13 @@ public class MenuButton : MonoBehaviour
       if (pressed) {
         switch (b) {
           case bType.PLAY:
-            mc.menuing = false;
-            mc.gameObject.SetActive(false);
-            mc.Stop();
-            mc.ic.StartGenerating();
+            TransitionToGame();
           break;
           case bType.TUTORIAL:
-            mc.menuing = false;
-            mc.gameObject.SetActive(false);
-            mc.Stop();
-            mc.ic.tutorializer.StartTutorial();
+            TransitionToTutorial();
           break;
           case bType.CREDITS:
-            mc.EnableCredits();
+            TransitionToCredits();
           break;
         }
       }

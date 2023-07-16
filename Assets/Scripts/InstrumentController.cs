@@ -63,6 +63,8 @@ public class InstrumentController : MonoBehaviour
     public Tutorializer wonSeq = null;
     public Tutorializer loseSeq = null;
 
+    public TransitionManager tm = null;
+
     // Our instrument has strings, but C# doesn't have variables named "string". So in this fun alternate universe
     // our instrument has "strangs".
     public void MakeNote(int strang, NColor col, bool abridged) {

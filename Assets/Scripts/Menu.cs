@@ -7,12 +7,21 @@ public class Menu : MonoBehaviour
 
     public bool menuing = false;
 
+    private bool tToPlay = false;
+    private bool tToTutorial = false;
+
+    public TransitionManager curtains;
+
     public GameObject credits = null;
-    private bool creditsEnabled = false;
+    public bool creditsEnabled = false;
 
     public InstrumentController ic = null;
 
     public MusicController music;
+
+    // transition objects
+    public GameObject playTO;
+    public GameObject tutorialTO;
 
     public void Play() {
       music.menuMusic.Play();
@@ -28,18 +37,21 @@ public class Menu : MonoBehaviour
       }
     }
 
-    public void EnableCredits() {
-      creditsEnabled = true;
-      credits.SetActive(true);
-      SetButtonsEnabled(false);
+    public void SetCreditsEnabled(bool enabled) {
+      creditsEnabled = enabled;
+      SetButtonsEnabled(!enabled);
+      if (enabled) {
+        ic.tm.Transition(null, credits);
+      } else {
+        ic.tm.Transition(credits, null);
+      }
+
     }
 
     void Update() {
       if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Escape)) {
         if (creditsEnabled) {
-          creditsEnabled = false;
-          credits.SetActive(false);
-          SetButtonsEnabled(true);
+          SetCreditsEnabled(false);
         }
       }
     }
