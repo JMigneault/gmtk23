@@ -152,6 +152,10 @@ public class InstrumentController : MonoBehaviour
       numGenerated = 0;
       numMutedCorrectly = 0;
       Stop();
+      // unmute strangs
+      for (int i = 0; i < strangMuted.Length; i++) {
+        SetStrangMuted(i, false);
+      }
     }
 
     public void GameDone(bool won) {
